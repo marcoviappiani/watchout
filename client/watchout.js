@@ -55,6 +55,8 @@ var update = function(data) {
   // UPDATE
   // Update old elements as needed.
   currentEnemies
+      .transition()
+        .duration(1000)
       .attr("cx", function(d){return d.xPos;})
       .attr("cy", function(d){return d.yPos;});
 
@@ -82,8 +84,8 @@ var update = function(data) {
 
 var updatePositions = function(){
   for (var i = 0; i < enemies.length; i++){
-    // enemies[i].yPos = 
-    // enemies[i].xPos = 
+    enemies[i].yPos = getRandomInt(50, gameOptions.height - 50);
+    enemies[i].xPos = getRandomInt(50, gameOptions.width - 50);
   }
   update(enemies);
 }
@@ -94,4 +96,4 @@ update(enemies);
 
 setInterval(function(){
   updatePositions();
-}, 5000);
+}, 3000);
