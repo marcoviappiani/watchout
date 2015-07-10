@@ -13,6 +13,27 @@ var gameOptions = {height: 450,
                    numOfEnemies: 30,
                    enemyRadiusSize: 10};
 
+var draggablePlayer = d3.behavior.drag()
+    .on("drag", function(d,i) {
+      player.attr('cx', d3.event.x);
+      player.attr('cy', d3.event.y);
+    });
+
+var gameArea = d3.select(".container")
+    .append('svg:svg')
+    .attr('width', gameOptions.width)
+    .attr('height', gameOptions.height)
+    .attr('class', 'gameArea');
+
+var player = d3.select(".gameArea")
+  .append('circle')
+  .attr('class', 'player')
+  .attr('cx', gameOptions.width / 2)
+  .attr('cy', gameOptions.height / 2)
+  .attr('r', gameOptions.enemyRadiusSize)
+  .attr('fill', 'orange')
+  .call(draggablePlayer);
+
 var enemies = [];
 
 var populateEnemies = function(){
@@ -23,8 +44,8 @@ var populateEnemies = function(){
 }
 
 var makeRandomEnemy = function(key){
-  var xPos = getRandomInt(50, gameOptions.width - 50);
-  var yPos = getRandomInt(50, gameOptions.height - 50);
+  var xPos = getRandomInt(gameOptions.enemyRadiusSize, gameOptions.width - gameOptions.enemyRadiusSize);
+  var yPos = getRandomInt(gameOptions.enemyRadiusSize, gameOptions.height - gameOptions.enemyRadiusSize);
   var radius = gameOptions.enemyRadiusSize;
   return {
     xPos: xPos,
@@ -38,18 +59,11 @@ var getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var gameArea = d3.select(".container")
-    .append('svg:svg')
-    .attr('width', gameOptions.width)
-    .attr('height', gameOptions.height)
-    .attr('class', 'gameArea');
-
-
 var update = function(data) {
 
   // DATA JOIN
   // Join new data with old elements, if any.
-  var currentEnemies = gameArea.selectAll('circle')
+  var currentEnemies = gameArea.selectAll('.enemy')
       .data(enemies, function(d){return d.key;});
 
   // UPDATE
@@ -84,8 +98,8 @@ var update = function(data) {
 
 var updatePositions = function(){
   for (var i = 0; i < enemies.length; i++){
-    enemies[i].yPos = getRandomInt(50, gameOptions.height - 50);
-    enemies[i].xPos = getRandomInt(50, gameOptions.width - 50);
+    enemies[i].yPos = getRandomInt(gameOptions.enemyRadiusSize, gameOptions.height - gameOptions.enemyRadiusSize);
+    enemies[i].xPos = getRandomInt(gameOptions.enemyRadiusSize, gameOptions.width - gameOptions.enemyRadiusSize);
   }
   update(enemies);
 }
@@ -96,4 +110,4 @@ update(enemies);
 
 setInterval(function(){
   updatePositions();
-}, 3000);
+}, 1000);

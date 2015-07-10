@@ -3,15 +3,9 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
-.gameboard {
-  width: 700px;
-  height: 700px;
-  background-color: white;
-}
-.circle {
-  cx: 20;
-  cy: 20;
-  r: 20;
-  fill: red;
-}
 
+
+
+svg {
+  background-color: black;
+}
