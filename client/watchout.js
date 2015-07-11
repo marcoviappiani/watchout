@@ -35,12 +35,16 @@ var player = d3.select(".gameArea")
   .attr('fill', 'orange')
   .call(draggablePlayer);
 
+var highScoreTag = d3.select(".high").select('span');
+var collisionTag = d3.select(".collisions").select('span');
+var currentTag = d3.select(".current").select('span');
+
 var enemies = [];
 
 var numOfCollisions = 0;
-
 var gameScore = 0;
 var highScore = 0;
+
 var collidedElementIndex = undefined;
 
 var calcDistance = function(x1, y1, x2, y2){
@@ -131,7 +135,9 @@ var updatePositions = function(){
 }
 
 var updateTags = function(){
-
+  currentTag.text(gameScore);
+  highScoreTag.text(highScore);
+  collisionTag.text(numOfCollisions);
 }
 
 
@@ -152,4 +158,4 @@ setInterval(function(){
   }
   gameScore++;
   updateTags();
-}, 25);
+}, 5);
