@@ -12,7 +12,7 @@ var gameOptions = {height: 450,
                    width: 700,
                    numOfEnemies: 30,
                    enemyRadiusSize: 10,
-                   distanceThreshold: .5};
+                   distanceThreshold: 20};
 
 var draggablePlayer = d3.behavior.drag()
     .on("drag", function(d,i) {
@@ -37,15 +37,29 @@ var player = d3.select(".gameArea")
 
 var enemies = [];
 
+var numOfCollisions = 0;
+
+var gameScore = 0;
+var highScore = 0;
+var collidedElementIndex = undefined;
+
 var calcDistance = function(x1, y1, x2, y2){
   return Math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
 var isCollision = function(){
   for (var i = 0; i< enemies.length; i++) {
+    if (i === collidedElementIndex){
+      continue;
+    }
     var distance = calcDistance(enemies[i].xPos, enemies[i].yPos, player.attr('cx'), player.attr('cy'));
-    //console.log(distance);
+    if (distance < gameOptions.distanceThreshold){
+      collidedElementIndex = i;
+      return true;
+    }
   }
+
+  return false;
 }
 
 var populateEnemies = function(){
@@ -116,6 +130,10 @@ var updatePositions = function(){
   update(enemies);
 }
 
+var updateTags = function(){
+
+}
+
 
 populateEnemies();
 update(enemies);
@@ -126,6 +144,12 @@ setInterval(function(){
 
 setInterval(function(){
   if (isCollision()){
-
+    numOfCollisions++;
+    if (gameScore > highScore){
+      highScore = gameScore;
+    }
+    gameScore = 0;
   }
-}, 30);
+  gameScore++;
+  updateTags();
+}, 25);
