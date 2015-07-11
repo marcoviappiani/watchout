@@ -11,7 +11,8 @@
 var gameOptions = {height: 450,
                    width: 700,
                    numOfEnemies: 30,
-                   enemyRadiusSize: 10};
+                   enemyRadiusSize: 10,
+                   distanceThreshold: .5};
 
 var draggablePlayer = d3.behavior.drag()
     .on("drag", function(d,i) {
@@ -35,6 +36,17 @@ var player = d3.select(".gameArea")
   .call(draggablePlayer);
 
 var enemies = [];
+
+var calcDistance = function(x1, y1, x2, y2){
+  return Math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+var isCollision = function(){
+  for (var i = 0; i< enemies.length; i++) {
+    var distance = calcDistance(enemies[i].xPos, enemies[i].yPos, player.attr('cx'), player.attr('cy'));
+    //console.log(distance);
+  }
+}
 
 var populateEnemies = function(){
   for (var i = 0; i < gameOptions.numOfEnemies; i++){
@@ -111,3 +123,9 @@ update(enemies);
 setInterval(function(){
   updatePositions();
 }, 1000);
+
+setInterval(function(){
+  if (isCollision()){
+
+  }
+}, 30);
